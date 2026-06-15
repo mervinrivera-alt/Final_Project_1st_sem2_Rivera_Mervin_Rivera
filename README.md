@@ -52,39 +52,86 @@ classDiagram
     }
     
 
-    ```mermaid class SortingWindow {
-        -JComboBox jComboBox1
-        -JComboBox jComboBox2
-        -JTextField jTextField9
+    ```mermaid classDiagram
+    %% Core View Classes (UI/Frames/Dialogs)
+    class login {
+        -int failedAttempts
+        -int timeLeft
+        -Timer lockoutTimer
+        +login()
+        -initComponents() void
+    }
+
+    class homeUI {
+        -info currentSession
+        +homeUI()
+        +homeUI(session: info)
+        -initComponents() void
+        -applyUserRoleUI() void
+    }
+
+    class SortingWindow {
+        -boolean isUpdateMode
+        -int updateCategoryId
+        -int currentEditingSortedId
+        -CRUD_OP CP
         +SortingWindow(parent: Frame, modal: boolean)
-        +showSpecificCard(cardName: String) void
-        -jButton7ActionPerformed(evt: ActionEvent) void
-        -loadSortedTable3() void
+        -initComponents() void
+        -setupSortForm() void
         -loadDeliveryTable() void
+        -loadSortedTable3() void
     }
 
-    %% Database & Logic Classes
-    class DBConnection {
-        -String url
-        -String user
-        -String password
-        +getConnection() Connection
+    class pricing_inventory {
+        +pricing_inventory(parent: Frame, modal: boolean)
+        -initComponents() void
+        -refreshPricingUI() void
+        -refreshInventoryTable(search: String) void
     }
 
+    %% Controller/Database Class
     class CRUD_OP {
-        +updateSortedBatch(specialId: int, categoryId: int, itemName: String, quantity: int, batchId: int, arrivalDate: String) boolean
+        +getAllItems() ArrayList~info~
+        +getItemDetailsByName(itemName: String) info
+        +authenticateUser(firstName: String, password: String) info
+        +saveTransaction(employeeId: String, totalAmount: double, cart: DefaultTableModel)$ boolean
+        +addCategory(categoryName: String)$ boolean
     }
 
-    %% Data Models
-    class CategoryItem {
-        +int id
-        +String name
-        +CategoryItem(id: int, name: String)
-        +toString() String
+    %% Model Class (Data Encapsulation with Getters & Setters)
+    class info {
+        -String itemId
+        -String itemName
+        -double price
+        -int quantity
+        -String employeeId
+        -String role
+        -String fname
+        -String password
+        
+        %% Getters & Setters
+        +setItemId(id: String) void
+        +getItemId() String
+        +setItemName(name: String) void
+        +getItemName() String
+        +setPrice(price: double) void
+        +getPrice() double
+        +setQuantity(qty: int) void
+        +getQuantity() int
+        
+        +setEmployeeId(id: String) void
+        +getEmployeeId() String
+        +setRole(role: String) void
+        +getRole() String
+        +setfname(fname: String) void
+        +getfname() String
+        +setPassword(password: String) void
+        +getPassword() String
     }
 
     %% Relationships and Dependencies
-    MainMenuDashboard --> SortingWindow : Opens (Instantiates)
-    SortingWindow --> CRUD_OP : Triggers operations
-    CRUD_OP ..> DBConnection : Requests connection
-    SortingWindow --> CategoryItem : Populates Dropdowns ```
+    login --> CRUD_OP : Authenticates via
+    login --> info : Generates Session
+    homeUI o-- info : Aggregates (Holds currentSession)
+    SortingWindow *-- CRUD_OP : Composes (Instantiates CP)
+    CRUD_OP ..> info : Creates & Returns ```

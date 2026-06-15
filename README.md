@@ -41,5 +41,3 @@ Building this system wasn't just a straight line from start to finish. It took d
 * **Database:** MySQL
 * **Database Connectivity:** JDBC (Java Database Connectivity)
 * **IDE:** Apache NetBeans 
-
-   git clone [https://github.com/yourusername/warehouse-management-system.git](https://github.com/yourusername/warehouse-management-system.git)

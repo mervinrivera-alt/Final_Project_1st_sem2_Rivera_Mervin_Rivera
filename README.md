@@ -41,3 +41,46 @@ Building this system wasn't just a straight line from start to finish. It took d
 * **Database:** MySQL
 * **Database Connectivity:** JDBC (Java Database Connectivity)
 * **IDE:** Apache NetBeans 
+
+classDiagram
+    %% Core UI Classes
+    class MainMenuDashboard {
+        -JButton jButtonMenu
+        -JPanel jPanelMainContainer
+        -CardLayout cardLayout
+        +jButtonNextPageActionPerformed(evt: ActionEvent) void
+    }
+    
+```mermaid```
+    class SortingWindow {
+        -JComboBox jComboBox1
+        -JComboBox jComboBox2
+        -JTextField jTextField9
+        +SortingWindow(parent: Frame, modal: boolean)
+        +showSpecificCard(cardName: String) void
+        -jButton7ActionPerformed(evt: ActionEvent) void
+        -loadSortedTable3() void
+        -loadDeliveryTable() void
+    }
+    %% Database & Logic Classes
+    class DBConnection {
+        -String url
+        -String user
+        -String password
+        +getConnection() Connection
+    }
+    class CRUD_OP {
+        +updateSortedBatch(specialId: int, categoryId: int, itemName: String, quantity: int, batchId: int, arrivalDate: String) boolean
+    }
+    %% Data Models
+    class CategoryItem {
+        +int id
+        +String name
+        +CategoryItem(id: int, name: String)
+        +toString() String
+    }
+    %% Relationships and Dependencies
+    MainMenuDashboard --> SortingWindow : Opens (Instantiates)
+    SortingWindow --> CRUD_OP : Triggers operations
+    CRUD_OP ..> DBConnection : Requests connection
+    SortingWindow --> CategoryItem : Populates Dropdowns
